@@ -22,11 +22,12 @@ const scenarioTopicMap: Record<string, { title: string, studentPersona: string, 
         interactionTitle: "Integración intercultural",
         context: "Durante el recreo, observas que Wayra está solo mientras sus compañeros juegan en grupos. En clase, cuando propones un trabajo grupal, los estudiantes forman equipos evitando incluirlo. Es momento de abordar esta situación para construir un ambiente verdaderamente inclusivo."
     },
+    // update: Transformado a formato alumno-docente con preguntas específicas de estudiantes virtuales
     'photosynthesis': {
         title: "Fotosíntesis",
         studentPersona: "Los estudiantes muestran curiosidad sobre por qué las plantas del huerto escolar crecen mejor en ciertas áreas. Tienes la oportunidad de explicar la fotosíntesis usando elementos del entorno inmediato: las plantas del huerto, la luz que entra por la ventana, y los cultivos que las familias mantienen.",
-        interactionTitle: "Explorando la fotosíntesis",
-        context: "Carmen pregunta: 'Profesor, ¿por qué las plantas de papa de mi chacra crecen más grandes donde hay más sol?' Es el momento perfecto para explicar la fotosíntesis conectándola con su experiencia agrícola familiar."
+        interactionTitle: "Pregunta de Carmen sobre fotosíntesis",
+        context: "Carmen levanta la mano y pregunta: 'Profe, ¿qué proceso permite que las plantas fabriquen su alimento?'"
     }
 };
 
@@ -71,57 +72,65 @@ const defaultScenario: Scenario = {
     },
     {
       id: 'blackboard',
-      title: 'Estrategias con la Pizarra',
-      context: 'La pizarra es uno de los recursos más valiosos en aulas rurales con tecnología limitada. Su uso efectivo puede compensar la falta de otros materiales y atender diferentes estilos de aprendizaje en un aula multigrado.',
+      title: 'Pregunta sobre la Pizarra',
+      // update: Transformado a formato alumno-docente - pregunta de estudiante sobre uso de la pizarra
+      context: 'María levanta la mano y pregunta: "Profe, ¿podemos usar la pizarra para dibujar cómo crecen nuestras plantas?"',
       options: [
         {
           id: 4,
-          text: "Organizar la pizarra en secciones claras por grado/tema, usando colores y dibujos simples para apoyar a estudiantes con diferentes niveles de lectoescritura.",
+          // update: Respuesta correcta - organizar pizarra visualmente para aprendizaje multigrado
+          text: "Responder: '¡Excelente idea! Organizaremos la pizarra en secciones para que cada grado dibuje su parte del proceso. Usaremos colores para diferenciar cada etapa.'",
           score: { empathy: 2, assertiveness: 1, inclusivity: 2, conflictManagement: 0 },
-          ramification: "Los estudiantes de diferentes grados pueden identificar fácilmente su sección. Los dibujos ayudan a estudiantes con dificultades de lectura. Las familias que visitan el aula pueden entender visualmente el trabajo realizado.",
-          feedback: "Excelente adaptación a la realidad multigrado. La organización visual y uso de dibujos es especialmente efectiva en contextos donde los estudiantes tienen distintos niveles de dominio del castellano o están en proceso de alfabetización."
+          ramification: "Los estudiantes de diferentes grados pueden identificar fácilmente su sección. Los dibujos ayudan a estudiantes con dificultades de lectura. Las familias que visitan el aula pueden entender visualmente el trabajo realizado. María se siente valorada.",
+          feedback: "✅ Excelente adaptación a la realidad multigrado. La organización visual y uso de dibujos es especialmente efectiva en contextos donde los estudiantes tienen distintos niveles de dominio del castellano o están en proceso de alfabetización."
         },
         {
           id: 5,
-          text: "Invitar a estudiantes mayores a escribir en la pizarra mientras explican a los menores, promoviendo el aprendizaje entre pares.",
-          score: { empathy: 2, assertiveness: 1, inclusivity: 2, conflictManagement: 0 },
-          ramification: "Los estudiantes mayores refuerzan su conocimiento al enseñar. Los menores se sienten más cómodos aprendiendo de sus pares. Se fortalece la colaboración multigrado, similar a la ayuda entre hermanos en el hogar rural.",
-          feedback: "¡Extraordinario! Has aplicado el principio de aprendizaje entre pares, especialmente valioso en aulas multigrado. Esto replica la estructura de ayuda familiar común en comunidades rurales y maximiza el aprendizaje de todos los niveles."
+          // update: Respuesta parcialmente correcta - buena idea pero falta estructura
+          text: "Responder: 'Sí, dibujen todos juntos en la pizarra, cada uno agregue lo que sabe.'",
+          score: { empathy: 1, assertiveness: 0, inclusivity: 1, conflictManagement: 0 },
+          ramification: "Los estudiantes comienzan a dibujar pero sin organización. Se superponen dibujos. Los más pequeños no alcanzan. Algunos estudiantes dominan el espacio. La actividad se vuelve caótica aunque participativa.",
+          feedback: "⚠️ Buena intención de participación pero falta estructura. En aulas multigrado necesitas organizar el espacio y los turnos. Considera: asignar secciones, establecer turnos por grado, o invitar a estudiantes mayores a ayudar a los menores."
         },
         {
           id: 6,
-          text: "Llenar la pizarra con toda la información del tema sin estructura clara, esperando que los estudiantes copien todo rápidamente.",
-          score: { empathy: -1, assertiveness: 0, inclusivity: -1, conflictManagement: 0 },
-          ramification: "Los estudiantes más pequeños no pueden copiar a la velocidad requerida. Estudiantes con dificultades de escritura se frustran. Los de grados mayores copian sin comprender, perdiendo la oportunidad de aprender significativamente.",
-          feedback: "En aulas multigrado, copiar extensivamente es ineficiente y excluyente. Considera que los estudiantes tienen diferentes ritmos y niveles de escritura. La claridad y selección de contenido esencial es más valiosa que la cantidad de información."
+          // update: Respuesta incorrecta - rechazar la creatividad del estudiante
+          text: "Responder: 'No, mejor copien del libro. La pizarra es solo para lo que yo escribo.'",
+          score: { empathy: -1, assertiveness: 1, inclusivity: -1, conflictManagement: 0 },
+          ramification: "María se desanima y guarda silencio. Los estudiantes pierden interés en la actividad. Se refuerza la idea de que solo el profesor tiene el conocimiento válido. La creatividad estudiantil se desalienta.",
+          feedback: "❌ Respuesta autoritaria que desvaloriza la iniciativa estudiantil. En contextos rurales donde la creatividad y el conocimiento local son valiosos, cerrar oportunidades de expresión visual limita el aprendizaje y reduce la participación."
         }
       ]
     },
     {
       id: 'window',
-      title: 'El Entorno como Recurso Pedagógico',
-      context: 'En escuelas rurales, el entorno natural y comunitario es un laboratorio vivo. La ventana conecta el aula con la realidad inmediata de los estudiantes: sus chacras, el clima, los ciclos naturales que rigen la vida familiar y comunitaria.',
+      title: 'Pregunta sobre el Entorno Natural',
+      // update: Transformado a formato alumno-docente - pregunta de estudiante sobre cultura local y entorno
+      context: 'Wayra observa por la ventana y pregunta: "Profe, ¿por qué aprendemos sobre plantas del libro si afuera tenemos las nuestras? ¿Por qué no usamos lo que vemos?"',
       options: [
         {
           id: 7,
-          text: "Integrar el paisaje visible en la lección: usar el movimiento del sol para enseñar tiempo, las nubes para clima, los cultivos para ciclos biológicos, conectando con el conocimiento agrícola familiar.",
+          // update: Respuesta correcta - valorar conocimiento local y conectarlo con el curricular
+          text: "Responder: 'Tienes razón, Wayra. Vamos a observar las plantas afuera primero. Luego compararemos con el libro para ver qué tenemos en común y qué es diferente. Tu conocimiento local es muy valioso.'",
           score: { empathy: 2, assertiveness: 1, inclusivity: 2, conflictManagement: 0 },
-          ramification: "Los estudiantes comparten conocimientos de sus familias sobre señales naturales. Carmen explica cómo su abuelo predice lluvias. Otros aportan saberes locales. El aprendizaje se vuelve bidireccional y culturalmente relevante.",
-          feedback: "¡Excepcional! Has practicado pedagogía situada. Al validar el conocimiento local y familiar, fortaleces la identidad cultural, aumentas la relevancia del aprendizaje y construyes puentes entre el saber comunitario y el curricular formal."
+          ramification: "Los estudiantes comparten conocimientos de sus familias sobre señales naturales. Carmen explica cómo su abuelo predice lluvias. Wayra comparte nombres de plantas en asháninka. Otros aportan saberes locales. El aprendizaje se vuelve bidireccional y culturalmente relevante.",
+          feedback: "✅ ¡Excepcional! Has practicado pedagogía situada. Al validar el conocimiento local y familiar, fortaleces la identidad cultural, aumentas la relevancia del aprendizaje y construyes puentes entre el saber comunitario y el curricular formal."
         },
         {
           id: 8,
-          text: "Pedir a los estudiantes que comparen lo que observan afuera con imágenes del libro de texto, identificando similitudes y diferencias con otros ecosistemas.",
+          // update: Respuesta parcialmente correcta - buena idea pero falta valoración explícita
+          text: "Responder: 'Buen punto. Podemos usar lo de afuera también, pero el libro tiene información científica que debemos aprender.'",
           score: { empathy: 1, assertiveness: 1, inclusivity: 1, conflictManagement: 0 },
-          ramification: "Los estudiantes desarrollan pensamiento crítico al comparar. Identifican que sus cultivos son diferentes a los de las imágenes. Comprenden que existen diversas realidades geográficas pero los principios científicos son universales.",
-          feedback: "Buena estrategia de conexión entre lo local y lo global. Ayudas a los estudiantes a entender su realidad particular dentro de conceptos más amplios, desarrollando tanto identidad local como comprensión de diversidad geográfica."
+          ramification: "Los estudiantes desarrollan pensamiento crítico al comparar. Identifican que sus cultivos son diferentes a los de las imágenes. Comprenden que existen diversas realidades geográficas pero los principios científicos son universales. Sin embargo, algunos sienten que su conocimiento local es menos importante.",
+          feedback: "⚠️ Buena estrategia de conexión pero falta equilibrio. Al decir 'debemos aprender' del libro primero, implícitamente jerarquizas el conocimiento formal sobre el local. Mejora: 'Ambos son importantes. El libro nos da conceptos científicos, y lo que tú conoces nos da ejemplos reales de nuestra comunidad.'"
         },
         {
           id: 9,
-          text: "Cerrar cortinas o pedir que no miren afuera para concentrarse solo en el contenido del libro, evitando distracciones.",
+          // update: Respuesta incorrecta - desvalorizar el conocimiento local
+          text: "Responder: 'El libro tiene la información correcta y científica. Lo de afuera es solo lo que ven tus familias, pero necesitamos aprender lo oficial.'",
           score: { empathy: 0, assertiveness: 1, inclusivity: -1, conflictManagement: 0 },
-          ramification: "Los estudiantes pierden conexión entre el aprendizaje abstracto y su realidad. María, que podría aportar conocimiento sobre plantas locales, permanece callada. Se refuerza la idea de que el conocimiento válido solo está en los libros, desvalorizando el saber local.",
-          feedback: "Esta aproximación descontextualizada es menos efectiva en contextos rurales. Desconectar el aprendizaje de la realidad inmediata puede reducir la motivación y perder oportunidades de aprendizaje significativo que aprovecha los recursos naturales disponibles como herramienta pedagógica."
+          ramification: "Los estudiantes pierden conexión entre el aprendizaje abstracto y su realidad. Wayra se calla, sintiendo que su conocimiento familiar no vale. María, que podría aportar conocimiento sobre plantas locales, permanece callada. Se refuerza la idea de que el conocimiento válido solo está en los libros, desvalorizando el saber local.",
+          feedback: "❌ Esta aproximación descontextualizada y desvalorizadora es muy perjudicial en contextos rurales. Desconectar el aprendizaje de la realidad inmediata reduce la motivación, pierde oportunidades de aprendizaje significativo y puede dañar la autoestima de estudiantes que poseen conocimiento cultural valioso."
         }
       ]
     }
@@ -194,22 +203,61 @@ export const getScenarioByTopicId = (topicId: string): Scenario => {
       };
   }
   
-  // For academic topics, customize for photosynthesis
+  // update: Transformado a formato alumno-docente - pregunta incorrecta de estudiante sobre fotosíntesis
   if (topicId === 'photosynthesis') {
+      // update: Agregar hotspot adicional solo para fotosíntesis con pregunta incorrecta de estudiante
+      scenario.hotspots.push({ id: 'student-question', pitch: -10, yaw: 30, text: 'Pregunta de Luis' });
+      
+      // update: Agregar interacción adicional con pregunta incorrecta de estudiante
+      scenario.interactions.push({
+        id: 'student-question',
+        title: 'Pregunta incorrecta de estudiante',
+        context: 'Luis pregunta con confusión: "Profe, ¿la fotosíntesis es cuando las plantas respiran oxígeno como nosotros?"',
+        options: [
+          {
+            id: 10,
+            // update: Respuesta correcta del docente - corregir concepto erróneo con claridad
+            text: "Responder: 'No, Luis. Las plantas durante la fotosíntesis PRODUCEN oxígeno, no lo respiran. Es como cuando tu mamá cocina: ella hace la comida, no la come en ese momento. Las plantas fabrican su alimento y liberan oxígeno.'",
+            score: { empathy: 0, assertiveness: 0, inclusivity: 0, conflictManagement: 0 },
+            ramification: "Luis comprende la diferencia. Otros estudiantes también aclaran sus dudas. Carmen agrega: 'Entonces las plantas son como una fábrica de comida y aire.' La analogía ayuda a todos a entender mejor.",
+            feedback: "✅ Excelente corrección pedagógica. Has usado una analogía familiar (cocinar) que conecta con la experiencia del estudiante. Corregir errores conceptuales con claridad y respeto es fundamental para el aprendizaje científico."
+          },
+          {
+            id: 11,
+            // update: Respuesta parcialmente correcta - correcta pero falta precisión
+            text: "Responder: 'Casi, pero no exactamente. Las plantas también respiran, pero la fotosíntesis es diferente.'",
+            score: { empathy: 0, assertiveness: 0, inclusivity: 0, conflictManagement: 0 },
+            ramification: "Luis sigue confundido. Otros estudiantes también muestran duda. La respuesta no aclara completamente la diferencia entre respiración y fotosíntesis. Las preguntas continúan.",
+            feedback: "⚠️ Respuesta parcialmente correcta pero incompleta. Reconoces que hay diferencia pero no la explicas claramente. Los estudiantes necesitan entender que: fotosíntesis = producir alimento y oxígeno (día), respiración = usar alimento y consumir oxígeno (día y noche)."
+          },
+          {
+            id: 12,
+            // update: Respuesta incorrecta del docente - confirma el error del estudiante
+            text: "Responder: 'Sí, exactamente. Las plantas respiran oxígeno igual que nosotros.'",
+            score: { empathy: 0, assertiveness: 0, inclusivity: 0, conflictManagement: 0 },
+            ramification: "Todos los estudiantes adoptan este concepto erróneo. La confusión se propaga. Otros estudiantes repiten esta información incorrecta a sus familias. El error conceptual se refuerza en toda la clase.",
+            feedback: "❌ Respuesta completamente incorrecta que refuerza el error conceptual. Las plantas SÍ respiran oxígeno, pero eso es diferente de la fotosíntesis. La fotosíntesis produce oxígeno. Es crucial distinguir entre estos dos procesos para evitar confusión."
+          }
+        ]
+      });
+      
       scenario.interactions[0].options.forEach((opt: any) => {
           opt.score = { empathy: 0, assertiveness: 0, inclusivity: 0, conflictManagement: 0 };
       });
-      scenario.interactions[0].options[0].text = "Decir: 'La luz solar es como la comida que las plantas comen directamente.'";
+      // update: Respuesta incorrecta del docente - concepto erróneo simplificado
+      scenario.interactions[0].options[0].text = "Responder: 'Las plantas comen directamente la luz solar como su alimento.'";
       scenario.interactions[0].options[0].ramification = "Los estudiantes adoptan este concepto erróneo. Aunque la explicación es simple, refuerza una comprensión incorrecta que será difícil corregir después. Carmen repite esto en casa y confunde a su familia.";
-      scenario.interactions[0].options[0].feedback = "Concepto erróneo común que sacrifica precisión por simplicidad. Aunque parezca pedagógico, es fundamental desde el inicio distinguir entre energía y materia. La luz es ENERGÍA que la planta usa para FABRICAR su comida (glucosa) a partir de CO₂ y agua.";
+      scenario.interactions[0].options[0].feedback = "❌ Concepto erróneo común que sacrifica precisión por simplicidad. Aunque parezca pedagógico, es fundamental desde el inicio distinguir entre energía y materia. La luz es ENERGÍA que la planta usa para FABRICAR su comida (glucosa) a partir de CO₂ y agua.";
       
-      scenario.interactions[0].options[1].text = "Explicar: 'Las plantas usan la luz del sol como energía para transformar el aire y el agua en su alimento' relacionándolo con cómo sus cultivos crecen mejor al sol.";
-      scenario.interactions[0].options[1].ramification = "Carmen hace la conexión: '¡Por eso la papa crece mejor en la parte soleada de nuestra chacra!' Otros estudiantes relacionan con sus observaciones agrícolas. El concepto se ancla en su experiencia práctica familiar.";
-      scenario.interactions[0].options[1].feedback = "¡Excelente! Has conectado el concepto científico con la realidad agrícola de los estudiantes. La fotosíntesis deja de ser abstracta y se vuelve relevante para entender sus actividades cotidianas. Este es aprendizaje situado efectivo.";
+      // update: Respuesta parcialmente correcta - correcta pero incompleta
+      scenario.interactions[0].options[1].text = "Responder: 'Absorben dióxido de carbono y lo convierten en oxígeno para nosotros respirar.'";
+      scenario.interactions[0].options[1].ramification = "Los estudiantes entienden parcialmente el proceso pero se enfocan solo en el oxígeno. Luis pregunta: '¿Entonces las plantas solo producen oxígeno?' Falta explicar que también producen su alimento. La comprensión queda incompleta.";
+      scenario.interactions[0].options[1].feedback = "⚠️ Respuesta parcialmente correcta. Has mencionado un producto de la fotosíntesis (oxígeno) pero falta explicar que el propósito principal es fabricar alimento (glucosa) para la planta. Completar con: 'y también fabrican su propio alimento usando esa energía.'";
       
-      scenario.interactions[0].options[2].text = "Usar el ciclo completo: explicar con el huerto escolar cómo la planta toma CO₂ del aire, agua del suelo, usa luz solar como energía y produce glucosa más oxígeno.";
-      scenario.interactions[0].options[2].ramification = "Los estudiantes van al huerto a observar. Identifican las partes: hojas captando luz, raíces en tierra húmeda. Comprenden el ciclo completo. Proponen experimentos: comparar crecimiento en sombra vs sol. El aprendizaje se vuelve investigación activa.";
-      scenario.interactions[0].options[2].feedback = "¡Pedagogía científica excepcional! Has convertido el aula en laboratorio vivo usando recursos disponibles. Al involucrar observación directa y experimentación, desarrollas pensamiento científico genuino mientras enseñas el concepto. Esto es educación STEM rural de calidad.";
+      // update: Respuesta correcta del docente - concepto completo y preciso
+      scenario.interactions[0].options[2].text = "Responder: 'Transforman la luz solar en energía para producir su alimento. La planta toma CO₂ del aire, agua del suelo y usa la luz como energía para fabricar glucosa (su comida) y liberar oxígeno.'";
+      scenario.interactions[0].options[2].ramification = "Carmen hace la conexión: '¡Por eso la papa crece mejor en la parte soleada de nuestra chacra!' Otros estudiantes relacionan con sus observaciones agrícolas. El concepto se ancla en su experiencia práctica familiar. Comprenden el proceso completo.";
+      scenario.interactions[0].options[2].feedback = "✅ ¡Excelente! Has dado una explicación completa y precisa. Has conectado el concepto científico con la realidad agrícola de los estudiantes. La fotosíntesis deja de ser abstracta y se vuelve relevante para entender sus actividades cotidianas. Este es aprendizaje situado efectivo.";
   }
 
   return scenario;
