@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Scenario, Option, PedagogicalScore, Interaction } from './types';
 import { getScenarioByTopicId } from './services/staticScenario';
-import { Heart, Shield, Users, GitBranch, ArrowRight, BookOpen, UserCheck, X, Sparkles, Leaf, Target as TargetIcon, BookCopy, FlaskConical, BarChart3, User, Settings, Menu, ChevronDown, Home } from 'lucide-react';
+import { Heart, Shield, Users, GitBranch, ArrowRight, BookOpen, UserCheck, X, Sparkles, Leaf, Target as TargetIcon, BookCopy, FlaskConical, BarChart3, User, Settings, Menu, ChevronDown, Home, Trophy, Trash2, Eye, RefreshCw } from 'lucide-react';
 
 
 declare global {
@@ -144,8 +144,221 @@ const getAllSavedScores = (teacherName: string): Record<string, PedagogicalScore
   return scores;
 };
 
-const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId: string, topicName: string) => void; onEditProfile: () => void; refreshTrigger?: number }> = ({ teacherName, onStartSimulation, onEditProfile, refreshTrigger }) => {
+// Función para eliminar todos los puntajes de un docente
+const clearAllScores = (teacherName: string) => {
+  try {
+    const prefix = `scores_${teacherName}_`;
+    const keysToDelete: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        keysToDelete.push(key);
+      }
+    }
+    keysToDelete.forEach(key => localStorage.removeItem(key));
+  } catch (error) {
+    console.error('Error al eliminar puntajes:', error);
+  }
+};
+
+// Componente de Perfil del Docente
+interface TeacherProfileModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  teacherProfile: TeacherProfile;
+  savedScores: Record<string, PedagogicalScore>;
+  onScoresCleared: () => void;
+}
+
+const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({ isOpen, onClose, teacherProfile, savedScores, onScoresCleared }) => {
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+
+  if (!isOpen) return null;
+
+  const getTotalScore = (score: PedagogicalScore): number => {
+    return Object.values(score).reduce((sum, val) => sum + val, 0);
+  };
+
+  const totalTopics = Object.keys(savedScores).length;
+  const totalScore = Object.values(savedScores).reduce((sum, score) => sum + getTotalScore(score), 0);
+  const avgScore = totalTopics > 0 ? (totalScore / totalTopics).toFixed(1) : '0';
+
+  const handleClearScores = () => {
+    clearAllScores(teacherProfile.name);
+    onScoresCleared();
+    setShowClearConfirm(false);
+  };
+
+  const experienceLabels = {
+    beginner: 'Principiante (0-2 años)',
+    intermediate: 'Intermedio (3-5 años)',
+    advanced: 'Avanzado (6+ años)'
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8" onClick={onClose}>
+      <div className="relative w-full max-w-4xl lg:max-w-5xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700/50 dark:to-gray-800/50">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-500 rounded-full flex items-center justify-center">
+                <User className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">Perfil del Docente</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{teacherProfile.name}</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+          {/* Información del Perfil */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+              <User className="w-5 h-5 mr-2 text-blue-500" />
+              Información Personal
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Escuela</p>
+                <p className="text-base font-medium text-gray-800 dark:text-white">{teacherProfile.school || 'No especificada'}</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Nivel de Experiencia</p>
+                <p className="text-base font-medium text-gray-800 dark:text-white">{experienceLabels[teacherProfile.experience as keyof typeof experienceLabels]}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Estadísticas Generales */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+              <Trophy className="w-5 h-5 mr-2 text-yellow-500" />
+              Estadísticas Generales
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{totalTopics}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Temas Completados</p>
+              </div>
+              <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-lg border border-green-200 dark:border-green-800">
+                <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{totalScore > 0 ? `+${totalScore}` : totalScore}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Puntaje Total</p>
+              </div>
+              <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-lg border border-purple-200 dark:border-purple-800">
+                <p className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">{avgScore}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Promedio</p>
+              </div>
+              <div className="p-4 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/30 dark:to-pink-800/30 rounded-lg border border-pink-200 dark:border-pink-800">
+                <p className="text-2xl sm:text-3xl font-bold text-pink-600 dark:text-pink-400">{allTopics.length}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Temas Disponibles</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Puntajes por Tema */}
+          {totalTopics > 0 ? (
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-blue-500" />
+                Puntajes Detallados por Tema
+              </h3>
+              <div className="space-y-3">
+                {Object.entries(savedScores).map(([topicId, score]) => {
+                  const topic = allTopics.find(t => t.id === topicId);
+                  if (!topic) return null;
+                  const total = getTotalScore(score);
+                  
+                  return (
+                    <div key={topicId} className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          {React.createElement(topic.icon, { className: "w-5 h-5 text-blue-500" })}
+                          <h4 className="font-semibold text-gray-800 dark:text-white">{topic.name}</h4>
+                        </div>
+                        <span className="text-lg font-bold text-gray-700 dark:text-gray-300">{total > 0 ? `+${total}` : total}</span>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        {Object.entries(score).map(([key, value]) => {
+                          const config = scoreConfig[key as keyof PedagogicalScore];
+                          const Icon = config.icon;
+                          return (
+                            <div key={key} className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600">
+                              <Icon className={`w-4 h-4 ${config.color}`} />
+                              <span className="text-sm text-gray-600 dark:text-gray-400">{config.label}:</span>
+                              <span className="text-sm font-bold text-gray-800 dark:text-white">{value}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Trophy className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+              <p className="text-gray-600 dark:text-gray-400">Aún no has completado ninguna simulación</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">¡Comienza a practicar para ver tus estadísticas!</p>
+            </div>
+          )}
+
+          {/* Acciones */}
+          {totalTopics > 0 && (
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <Settings className="w-5 h-5 mr-2 text-gray-500" />
+                Acciones
+              </h3>
+              {!showClearConfirm ? (
+                <button
+                  onClick={() => setShowClearConfirm(true)}
+                  className="w-full md:w-auto px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Eliminar Todos los Puntajes
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">¿Estás seguro de que deseas eliminar todos los puntajes? Esta acción no se puede deshacer.</p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleClearScores}
+                      className="flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+                    >
+                      Sí, Eliminar
+                    </button>
+                    <button
+                      onClick={() => setShowClearConfirm(false)}
+                      className="flex-1 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WelcomeScreen: React.FC<{ teacherName: string; teacherProfile: TeacherProfile | null; onStartSimulation: (topicId: string, topicName: string) => void; onEditProfile: () => void; refreshTrigger?: number }> = ({ teacherName, teacherProfile, onStartSimulation, onEditProfile, refreshTrigger }) => {
   const [savedScores, setSavedScores] = useState<Record<string, PedagogicalScore>>({});
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   
   useEffect(() => {
     // Cargar puntajes guardados al montar el componente o cuando cambie el trigger
@@ -167,19 +380,38 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
     return savedScores[topicId] || null;
   }
 
+  const handleScoresCleared = () => {
+    const scores = getAllSavedScores(teacherName);
+    setSavedScores(scores);
+    setIsProfileModalOpen(false);
+  }
+
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-3 sm:p-4 lg:p-6 overflow-y-auto landscape:overflow-hidden">
+    <>
+      <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-3 sm:p-4 lg:p-6 overflow-y-auto landscape:overflow-hidden">
       <div className="w-full max-w-6xl lg:max-w-7xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 lg:p-8 border border-gray-200 dark:border-gray-700">
         {/* Header compacto para landscape */}
         <div className="text-center mb-4 sm:mb-6 lg:mb-8 relative landscape:mb-4">
-          <button
-            onClick={onEditProfile}
-            className="absolute top-0 right-0 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 active:scale-95 transition-colors touch-manipulation"
-            title="Editar perfil"
-            aria-label="Editar perfil"
-          >
-            <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
+          <div className="absolute top-0 right-0 flex gap-2">
+            {teacherProfile && (
+              <button
+                onClick={() => setIsProfileModalOpen(true)}
+                className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-colors touch-manipulation"
+                title="Ver perfil completo"
+                aria-label="Ver perfil completo"
+              >
+                <User className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            )}
+            <button
+              onClick={onEditProfile}
+              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 active:scale-95 transition-colors touch-manipulation"
+              title="Editar perfil"
+              aria-label="Editar perfil"
+            >
+              <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+          </div>
           <Sparkles className="mx-auto h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 landscape:h-10 landscape:w-10 text-blue-500 mb-2 sm:mb-3 landscape:mb-2 animate-pulse" />
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl landscape:text-2xl font-bold text-gray-800 dark:text-white mb-1 sm:mb-2">
             ¡Hola, {teacherName}!
@@ -310,7 +542,16 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
           </div>
         </div>
       </div>
-    </div>
+      {teacherProfile && (
+        <TeacherProfileModal
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          teacherProfile={teacherProfile}
+          savedScores={savedScores}
+          onScoresCleared={handleScoresCleared}
+        />
+      )}
+    </>
   );
 };
 
@@ -745,7 +986,7 @@ const App: React.FC = () => {
   }
 
   if (appState === 'welcome' || !currentScenario) {
-    return <WelcomeScreen teacherName={teacherProfile?.name || 'Docente'} onStartSimulation={handleStartSimulation} onEditProfile={handleEditProfile} refreshTrigger={refreshTrigger} />;
+    return <WelcomeScreen teacherName={teacherProfile?.name || 'Docente'} teacherProfile={teacherProfile} onStartSimulation={handleStartSimulation} onEditProfile={handleEditProfile} refreshTrigger={refreshTrigger} />;
   }
   
   const currentTopicConfig = allTopics.find(t => t.id === currentTopicId) || { type: 'pedagogical' };
