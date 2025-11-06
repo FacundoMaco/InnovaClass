@@ -542,6 +542,7 @@ const WelcomeScreen: React.FC<{ teacherName: string; teacherProfile: TeacherProf
           </div>
         </div>
       </div>
+      </div>
       {teacherProfile && (
         <TeacherProfileModal
           isOpen={isProfileModalOpen}
