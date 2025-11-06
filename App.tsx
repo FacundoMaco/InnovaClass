@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Scenario, Option, PedagogicalScore, Interaction } from './types';
 import { getScenarioByTopicId } from './services/staticScenario';
-import { Heart, Shield, Users, GitBranch, ArrowRight, BookOpen, UserCheck, X, Sparkles, Leaf, Target as TargetIcon, BookCopy, FlaskConical, BarChart3, User, Settings } from 'lucide-react';
+import { Heart, Shield, Users, GitBranch, ArrowRight, BookOpen, UserCheck, X, Sparkles, Leaf, Target as TargetIcon, BookCopy, FlaskConical, BarChart3, User, Settings, Menu, ChevronDown, Home } from 'lucide-react';
 
 
 declare global {
@@ -54,19 +54,19 @@ const SetupScreen: React.FC<{ onComplete: (profile: TeacherProfile) => void; ini
   };
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
-      <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700 animate-fade-in-up">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
-            <User className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+      <div className="w-full max-w-3xl lg:max-w-4xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-5 sm:p-6 md:p-8 lg:p-10 border border-gray-200 dark:border-gray-700 animate-fade-in-up">
+        <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-3 sm:mb-4">
+            <User className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-blue-600 dark:text-blue-400" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Bienvenido a InnovaClass</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Configura tu perfil para comenzar</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2">Bienvenido a InnovaClass</h1>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-400">Configura tu perfil para comenzar</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 lg:space-y-8">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="name" className="block text-sm sm:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
               Nombre del Docente <span className="text-red-500">*</span>
             </label>
             <input
@@ -76,12 +76,12 @@ const SetupScreen: React.FC<{ onComplete: (profile: TeacherProfile) => void; ini
               onChange={(e) => setName(e.target.value)}
               placeholder="Ingresa tu nombre"
               required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 transition-all"
+              className="w-full px-4 py-3 sm:px-5 sm:py-4 lg:px-6 lg:py-5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 transition-all text-base sm:text-lg"
             />
           </div>
 
           <div>
-            <label htmlFor="school" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="school" className="block text-sm sm:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
               Escuela o Institución
             </label>
             <input
@@ -90,19 +90,19 @@ const SetupScreen: React.FC<{ onComplete: (profile: TeacherProfile) => void; ini
               value={school}
               onChange={(e) => setSchool(e.target.value)}
               placeholder="Nombre de tu escuela (opcional)"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 transition-all"
+              className="w-full px-4 py-3 sm:px-5 sm:py-4 lg:px-6 lg:py-5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 transition-all text-base sm:text-lg"
             />
           </div>
 
           <div>
-            <label htmlFor="experience" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="experience" className="block text-sm sm:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
               Nivel de Experiencia
             </label>
             <select
               id="experience"
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white transition-all"
+              className="w-full px-4 py-3 sm:px-5 sm:py-4 lg:px-6 lg:py-5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white transition-all text-base sm:text-lg"
             >
               <option value="beginner">Principiante (0-2 años)</option>
               <option value="intermediate">Intermedio (3-5 años)</option>
@@ -113,9 +113,9 @@ const SetupScreen: React.FC<{ onComplete: (profile: TeacherProfile) => void; ini
           <button
             type="submit"
             disabled={!name.trim()}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:from-blue-800 active:to-indigo-800 text-white font-bold py-3.5 sm:py-4 lg:py-5 px-6 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg active:shadow-xl transform active:scale-[0.98] touch-manipulation text-base sm:text-lg lg:text-xl"
           >
-            Continuar <ArrowRight className="w-5 h-5 ml-2" />
+            Continuar <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 ml-2 flex-shrink-0" />
           </button>
         </form>
       </div>
@@ -130,61 +130,73 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
   }
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
-        <div className="text-center mb-10 relative">
+    <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-3 sm:p-4 lg:p-6 overflow-y-auto landscape:overflow-hidden">
+      <div className="w-full max-w-6xl lg:max-w-7xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 lg:p-8 border border-gray-200 dark:border-gray-700">
+        {/* Header compacto para landscape */}
+        <div className="text-center mb-4 sm:mb-6 lg:mb-8 relative landscape:mb-4">
           <button
             onClick={onEditProfile}
-            className="absolute top-0 right-0 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            className="absolute top-0 right-0 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 active:scale-95 transition-colors touch-manipulation"
             title="Editar perfil"
+            aria-label="Editar perfil"
           >
-            <Settings className="w-5 h-5" />
+            <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
-          <Sparkles className="mx-auto h-16 w-16 text-blue-500 mb-4 animate-pulse" />
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
+          <Sparkles className="mx-auto h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 landscape:h-10 landscape:w-10 text-blue-500 mb-2 sm:mb-3 landscape:mb-2 animate-pulse" />
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl landscape:text-2xl font-bold text-gray-800 dark:text-white mb-1 sm:mb-2">
             ¡Hola, {teacherName}!
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Elige tu simulación para comenzar a practicar.</p>
+          <p className="text-sm sm:text-base lg:text-lg landscape:text-sm text-gray-600 dark:text-gray-400">Elige tu simulación para comenzar a practicar.</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Grid adaptativo: vertical en portrait, horizontal en landscape */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 landscape:grid-cols-2 landscape:gap-4">
           {/* Pedagogical Training Column */}
-          <div className="flex flex-col space-y-4">
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 border-b-2 border-blue-500 pb-2 mb-2 flex items-center"><BookCopy className="w-6 h-6 mr-2"/> Capacitación Pedagógica</h2>
+          <div className="flex flex-col space-y-2 sm:space-y-3 landscape:space-y-2">
+            <h2 className="text-base sm:text-lg lg:text-xl landscape:text-base font-semibold text-gray-700 dark:text-gray-300 border-b-2 border-blue-500 pb-1.5 sm:pb-2 landscape:pb-1.5 mb-1.5 sm:mb-2 landscape:mb-1.5 flex items-center">
+              <BookCopy className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 landscape:w-4 landscape:h-4 mr-2 flex-shrink-0"/> 
+              <span>Capacitación Pedagógica</span>
+            </h2>
             {pedagogicalTopics.map(topic => {
               const Icon = topic.icon;
               return (
                 <button
                   key={topic.id}
                   onClick={() => handleStart(topic.id, topic.name)}
-                  className="w-full p-4 flex items-center bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-blue-100 hover:border-blue-400 dark:hover:bg-blue-900/50 dark:hover:border-blue-600 transition-all duration-200"
+                  className="w-full p-2.5 sm:p-3 lg:p-4 landscape:p-2.5 flex items-center bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 active:bg-blue-100 active:border-blue-400 dark:active:bg-blue-900/50 dark:active:border-blue-600 transition-all duration-200 transform active:scale-[0.98] touch-manipulation"
                 >
-                  <Icon className="h-7 w-7 mr-4 text-blue-500" />
-                  <span className="font-semibold text-md text-gray-700 dark:text-gray-200">{topic.name}</span>
-                  <ArrowRight className="w-6 h-6 ml-auto text-gray-400" />
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 landscape:h-5 landscape:w-5 mr-2 sm:mr-3 landscape:mr-2 text-blue-500 flex-shrink-0" />
+                  <span className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs text-gray-700 dark:text-gray-200 text-left flex-1 truncate">{topic.name}</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 landscape:w-4 landscape:h-4 ml-auto text-gray-400 flex-shrink-0" />
                 </button>
               )
             })}
           </div>
 
           {/* Academic Training Column */}
-          <div className="flex flex-col space-y-4">
-             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 border-b-2 border-green-500 pb-2 mb-2 flex items-center"><Leaf className="w-6 h-6 mr-2"/> Capacitación Académica</h2>
+          <div className="flex flex-col space-y-2 sm:space-y-3 landscape:space-y-2">
+             <h2 className="text-base sm:text-lg lg:text-xl landscape:text-base font-semibold text-gray-700 dark:text-gray-300 border-b-2 border-green-500 pb-1.5 sm:pb-2 landscape:pb-1.5 mb-1.5 sm:mb-2 landscape:mb-1.5 flex items-center">
+               <Leaf className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 landscape:w-4 landscape:h-4 mr-2 flex-shrink-0"/> 
+               <span>Capacitación Académica</span>
+             </h2>
              {academicTopics.map(course => (
-               <div key={course.course} className="bg-gray-50 dark:bg-gray-900/60 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                 <h3 className="font-bold text-lg mb-3 text-gray-600 dark:text-gray-400 flex items-center"><course.icon className="w-5 h-5 mr-2"/> Curso: {course.course}</h3>
-                 <div className="space-y-3">
+               <div key={course.course} className="bg-gray-50 dark:bg-gray-900/60 p-2.5 sm:p-3 lg:p-4 landscape:p-2.5 rounded-lg border border-gray-200 dark:border-gray-700">
+                 <h3 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs mb-1.5 sm:mb-2 landscape:mb-1.5 text-gray-600 dark:text-gray-400 flex items-center">
+                   <course.icon className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 landscape:w-3 landscape:h-3 mr-1.5 flex-shrink-0"/> 
+                   <span className="truncate">Curso: {course.course}</span>
+                 </h3>
+                 <div className="space-y-1.5 sm:space-y-2 landscape:space-y-1.5">
                     {course.topics.map(topic => {
                       const Icon = topic.icon;
                       return (
                         <button
                           key={topic.id}
                           onClick={() => handleStart(topic.id, `${course.course}: ${topic.name}`)}
-                          className="w-full p-3 flex items-center bg-white dark:bg-gray-700/50 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-green-100 hover:border-green-400 dark:hover:bg-green-900/50 dark:hover:border-green-600 transition-all duration-200"
+                          className="w-full p-2 sm:p-2.5 lg:p-3 landscape:p-2 flex items-center bg-white dark:bg-gray-700/50 rounded-lg border border-gray-300 dark:border-gray-600 active:bg-green-100 active:border-green-400 dark:active:bg-green-900/50 dark:active:border-green-600 transition-all duration-200 transform active:scale-[0.98] touch-manipulation"
                         >
-                          <Icon className="h-6 w-6 mr-3 text-green-500" />
-                          <span className="font-semibold text-md text-gray-700 dark:text-gray-200">{topic.name}</span>
-                          <ArrowRight className="w-5 h-5 ml-auto text-gray-400" />
+                          <Icon className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 landscape:h-4 landscape:w-4 mr-2 text-green-500 flex-shrink-0" />
+                          <span className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs text-gray-700 dark:text-gray-200 text-left flex-1 truncate">{topic.name}</span>
+                          <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 landscape:w-3 landscape:h-3 ml-auto text-gray-400 flex-shrink-0" />
                         </button>
                       )
                     })}
@@ -200,35 +212,35 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
 
 
 const scoreConfig = {
-    empathy: { label: 'Empatía', icon: Heart, color: 'text-pink-500' },
-    assertiveness: { label: 'Asertividad', icon: Shield, color: 'text-blue-500' },
-    inclusivity: { label: 'Inclusividad', icon: Users, color: 'text-purple-500' },
-    conflictManagement: { label: 'Manejo de Conflicto', icon: GitBranch, color: 'text-green-500' },
+    empathy: { label: 'Empatía', icon: Heart, color: 'text-pink-500', bgColor: 'bg-pink-500' },
+    assertiveness: { label: 'Asertividad', icon: Shield, color: 'text-blue-500', bgColor: 'bg-blue-500' },
+    inclusivity: { label: 'Inclusividad', icon: Users, color: 'text-purple-500', bgColor: 'bg-purple-500' },
+    conflictManagement: { label: 'Manejo de Conflicto', icon: GitBranch, color: 'text-green-500', bgColor: 'bg-green-500' },
 }
 
 const Scoreboard: React.FC<{ score: PedagogicalScore }> = ({ score }) => (
-  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl w-full shadow-xl">
-    <h2 className="text-2xl font-semibold mb-6 border-b-2 pb-3 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 flex items-center">
-      <BarChart3 className="w-6 h-6 mr-2 text-blue-500" />
-      Puntaje Pedagógico
+  <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl w-full shadow-xl max-h-[85vh] overflow-y-auto">
+    <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 border-b-2 pb-2 sm:pb-3 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 flex items-center">
+      <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-500 flex-shrink-0" />
+      <span>Puntaje Pedagógico</span>
     </h2>
-    <ul className="space-y-4">
+    <ul className="space-y-3 sm:space-y-4">
       {Object.entries(score).map(([key, value]) => {
         const config = scoreConfig[key as keyof PedagogicalScore];
         const Icon = config.icon;
         const percentage = Math.max(0, Math.min(100, ((value + 10) / 20) * 100)); // Normalizar a 0-100
         return (
           <li key={key} className="space-y-2">
-            <div className="flex items-center justify-between text-lg mb-1">
-              <div className="flex items-center">
-                <Icon className={`w-6 h-6 mr-3 ${config.color}`} />
-                <span className="font-medium text-gray-700 dark:text-gray-300">{config.label}</span>
+            <div className="flex items-center justify-between text-base sm:text-lg mb-1">
+              <div className="flex items-center flex-1 min-w-0">
+                <Icon className={`w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 flex-shrink-0 ${config.color}`} />
+                <span className="font-medium text-gray-700 dark:text-gray-300 truncate">{config.label}</span>
               </div>
-              <span className="font-bold text-gray-900 dark:text-white text-xl">{value}</span>
+              <span className="font-bold text-gray-900 dark:text-white text-lg sm:text-xl ml-2 flex-shrink-0">{value}</span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 sm:h-3 overflow-hidden">
               <div 
-                className={`h-full rounded-full transition-all duration-500 ${config.color.replace('text-', 'bg-')}`}
+                className={`h-full rounded-full transition-all duration-500 ${config.bgColor}`}
                 style={{ width: `${percentage}%` }}
               />
             </div>
@@ -240,12 +252,12 @@ const Scoreboard: React.FC<{ score: PedagogicalScore }> = ({ score }) => (
 );
 
 const AcademicContext: React.FC<{ topic: string }> = ({ topic }) => (
-  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg w-full">
-    <h2 className="text-xl font-semibold mb-3 border-b pb-3 border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-gray-100">
-      <TargetIcon className="w-6 h-6 mr-3 text-blue-400"/>
-      Objetivos de Aprendizaje
+  <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg w-full max-h-[85vh] overflow-y-auto">
+    <h2 className="text-lg sm:text-xl font-semibold mb-3 border-b pb-2 sm:pb-3 border-gray-200 dark:border-gray-700 flex items-center text-gray-800 dark:text-gray-100">
+      <TargetIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-400 flex-shrink-0"/>
+      <span>Objetivos de Aprendizaje</span>
     </h2>
-    <p className="text-lg text-gray-700 dark:text-gray-300">
+    <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
       Utilizar el entorno para explicar los conceptos clave de <strong>{topic.split(': ')[1] || topic}</strong>.
     </p>
   </div>
@@ -333,84 +345,106 @@ const ScenarioViewer: React.FC<{ scenario: Scenario; onHotspotClick: (id: string
   return <div ref={panoramaRef} className="absolute inset-0 w-full h-full" />;
 };
 
-const ScenarioContext: React.FC<{ interaction: Interaction, studentPersona: string }> = ({ interaction, studentPersona }) => (
-    <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-xl shadow-2xl p-6 border-2 border-white/30 dark:border-gray-700/50">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100 flex items-center">
-          <BookOpen className="w-6 h-6 mr-2 text-blue-500" />
-          {interaction.title}
-        </h2>
-        <div className="space-y-4">
-            <div className="flex items-start">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mr-3">
-                  <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400"/>
-                </div>
-                <div>
-                    <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Contexto:</h3>
-                    <p className="text-gray-700 dark:text-gray-400 leading-relaxed">{interaction.context}</p>
-                </div>
-            </div>
-             <div className="flex items-start">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center mr-3">
-                  <UserCheck className="w-5 h-5 text-green-600 dark:text-green-400"/>
-                </div>
-                <div>
-                    <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Elementos Clave:</h3>
-                    <p className="text-gray-700 dark:text-gray-400 leading-relaxed">{studentPersona}</p>
-                </div>
-            </div>
+const ScenarioContext: React.FC<{ interaction: Interaction, studentPersona: string }> = ({ interaction, studentPersona }) => {
+  // Extraer el nombre del estudiante del contexto si está presente
+  const studentName = interaction.context.match(/(?:Carmen|María|Luis|Wayra|Ana)/)?.[0] || 'Estudiante';
+  
+  return (
+    <div className="w-full">
+      {/* Mensaje del estudiante tipo chat - diseño limpio y completo */}
+      <div className="flex items-start gap-2 sm:gap-3 landscape:gap-2 mb-3 sm:mb-4 landscape:mb-3">
+        <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-md">
+          <UserCheck className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white"/>
         </div>
-    </div>
-);
-
-const Options: React.FC<{ options: Option[], onSelect: (option: Option) => void, disabled: boolean }> = ({ options, onSelect, disabled }) => (
-  <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 rounded-xl shadow-2xl border border-white/30 dark:border-gray-700/50">
-    <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">¿Qué harías en esta situación?</h3>
-    <div className="space-y-3">
-      {options.map((option, index) => (
-        <button 
-          key={option.id} 
-          onClick={() => onSelect(option)} 
-          disabled={disabled}
-          className="w-full text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/30 dark:hover:to-blue-800/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group transform hover:scale-[1.02] hover:shadow-lg"
-          style={{ animationDelay: `${index * 0.1}s` }}
-        >
-          <div className="flex items-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mr-3 mt-0.5 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
-              <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{index + 1}</span>
-            </div>
-            <p className="text-gray-800 dark:text-gray-200 group-hover:text-blue-800 dark:group-hover:text-blue-200 font-medium transition-colors">{option.text}</p>
+        <div className="flex-1 min-w-0">
+          <div className="mb-1">
+            <span className="text-xs sm:text-sm landscape:text-xs font-semibold text-gray-700 dark:text-gray-300">{studentName}</span>
+            <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">ahora</span>
           </div>
-        </button>
-      ))}
+          <div className="bg-green-500 dark:bg-green-600 rounded-2xl rounded-tl-sm px-3 py-2 sm:px-4 sm:py-2.5 landscape:px-3 landscape:py-2 shadow-sm max-w-[90%] sm:max-w-[85%]">
+            <p className="text-sm sm:text-base md:text-lg landscape:text-sm text-white leading-relaxed break-words whitespace-pre-wrap">{interaction.context}</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+const Options: React.FC<{ options: Option[], onSelect: (option: Option) => void, disabled: boolean }> = ({ options, onSelect, disabled }) => {
+  // Función para extraer solo la respuesta del docente (eliminar "Responder: '...'")
+  const extractResponse = (text: string): string => {
+    const match = text.match(/Responder:?\s*['"](.+?)['"]/);
+    if (match) {
+      return match[1];
+    }
+    // Si no tiene formato de respuesta, truncar si es muy largo (más corto para Cardboard)
+    if (text.length > 100) {
+      return text.substring(0, 97) + '...';
+    }
+    return text;
+  };
+
+  return (
+    <div className="w-full space-y-2 sm:space-y-2.5 landscape:space-y-2">
+      {options.map((option, index) => {
+        const responseText = extractResponse(option.text);
+        return (
+          <button 
+            key={option.id} 
+            onClick={() => onSelect(option)} 
+            disabled={disabled}
+            className="w-full text-left flex items-start gap-2 sm:gap-3 landscape:gap-2 p-2.5 sm:p-3 landscape:p-2.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group transform active:scale-[0.98] touch-manipulation"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            {/* Avatar del docente - alineado a la derecha */}
+            <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 landscape:w-8 landscape:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md order-2">
+              <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 landscape:w-4 landscape:h-4 text-white"/>
+            </div>
+            {/* Mensaje del docente - alineado a la derecha */}
+            <div className="flex-1 min-w-0 flex flex-col items-end order-1">
+              <div className="mb-1">
+                <span className="text-xs sm:text-sm landscape:text-xs font-semibold text-gray-700 dark:text-gray-300">Tú</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">ahora</span>
+              </div>
+              <div className="bg-blue-500 dark:bg-blue-600 rounded-2xl rounded-tr-sm px-3 py-2 sm:px-4 sm:py-2.5 landscape:px-3 landscape:py-2 shadow-sm max-w-[85%] group-active:bg-blue-600 dark:group-active:bg-blue-700 transition-colors">
+                <p className="text-sm sm:text-base md:text-lg landscape:text-sm text-white leading-relaxed break-words">{responseText}</p>
+              </div>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 const Feedback: React.FC<{ option: Option, onNext: () => void, isAcademic: boolean }> = ({ option, onNext, isAcademic }) => {
   const scoreTotal = Object.values(option.score).reduce((sum, val) => sum + val, 0);
   const isPositive = scoreTotal > 0;
   
   return (
-    <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-6 rounded-xl shadow-2xl flex flex-col border-2 border-white/30 dark:border-gray-700/50">
-      <div>
-        <div className={`mb-4 p-4 rounded-lg ${isPositive ? 'bg-green-50/80 dark:bg-green-900/20' : 'bg-orange-50/80 dark:bg-orange-900/20'} border-2 ${isPositive ? 'border-green-200 dark:border-green-800' : 'border-orange-200 dark:border-orange-800'}`}>
-          <h4 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-2 flex items-center">
-            {isPositive ? '✅' : '⚠️'} Consecuencia:
+    <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md p-2.5 sm:p-3 md:p-4 lg:p-5 landscape:p-2.5 landscape:sm:p-3 rounded-xl shadow-2xl flex flex-col border-2 border-white/30 dark:border-gray-700/50 max-w-full">
+      <div className="space-y-2 sm:space-y-3 landscape:space-y-2">
+        <div className={`p-2.5 sm:p-3 md:p-4 landscape:p-2.5 rounded-lg ${isPositive ? 'bg-green-50/80 dark:bg-green-900/20' : 'bg-orange-50/80 dark:bg-orange-900/20'} border-2 ${isPositive ? 'border-green-200 dark:border-green-800' : 'border-orange-200 dark:border-orange-800'}`}>
+          <h4 className="font-bold text-sm sm:text-base md:text-lg lg:text-xl landscape:text-sm landscape:md:text-base text-gray-800 dark:text-gray-200 mb-1.5 sm:mb-2 landscape:mb-1.5 flex items-center">
+            <span className="mr-1.5 sm:mr-2 text-base sm:text-lg md:text-xl landscape:text-base">{isPositive ? '✅' : '⚠️'}</span>
+            <span>Consecuencia:</span>
           </h4>
-          <p className="text-gray-700 dark:text-gray-300">{option.ramification}</p>
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs landscape:md:text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words">{option.ramification}</p>
         </div>
-        <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-lg border-2 border-blue-200 dark:border-blue-800">
-          <h4 className="font-bold text-lg text-blue-800 dark:text-blue-200 mb-2">
-              {isAcademic ? "📚 Explicación Académica:" : "💡 Retroalimentación Pedagógica:"}
+        <div className="p-2.5 sm:p-3 md:p-4 landscape:p-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+          <h4 className="font-bold text-sm sm:text-base md:text-lg lg:text-xl landscape:text-sm landscape:md:text-base text-blue-800 dark:text-blue-200 mb-1.5 sm:mb-2 landscape:mb-1.5 flex items-center">
+            <span className="mr-1.5 sm:mr-2">{isAcademic ? "📚" : "💡"}</span>
+            <span>{isAcademic ? "Explicación Académica:" : "Retroalimentación Pedagógica:"}</span>
           </h4>
-          <p className="text-blue-700 dark:text-blue-300 leading-relaxed">{option.feedback}</p>
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs landscape:md:text-sm text-blue-700 dark:text-blue-300 leading-relaxed break-words">{option.feedback}</p>
         </div>
       </div>
       <button 
         onClick={onNext} 
-        className="mt-auto w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+        className="mt-2 sm:mt-3 landscape:mt-2 w-full bg-gradient-to-r from-blue-600 to-indigo-600 active:from-blue-700 active:to-indigo-700 text-white font-bold py-2.5 sm:py-3 md:py-4 landscape:py-2.5 landscape:sm:py-3 px-3 sm:px-4 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center shadow-lg active:shadow-xl transform active:scale-[0.98] touch-manipulation text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs landscape:md:text-sm"
       >
-        Continuar Explorando <ArrowRight className="w-5 h-5 ml-2" />
+        <span>Continuar Explorando</span>
+        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 landscape:w-3 landscape:md:w-4 ml-1.5 sm:ml-2 flex-shrink-0" />
       </button>
     </div>
   );
@@ -420,13 +454,15 @@ const ScoreModal: React.FC<{ isOpen: boolean; onClose: () => void; children: Rea
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={onClose}>
-            <div className="relative w-full max-w-md p-4" onClick={(e) => e.stopPropagation()}>
-                <div className="animate-fade-in-up">
-                    {children}
-                </div>
-                 <button onClick={onClose} className="absolute -top-2 -right-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg">
-                    <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8" onClick={onClose}>
+            <div className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl animate-fade-in-up mx-4" onClick={(e) => e.stopPropagation()}>
+                {children}
+                <button 
+                    onClick={onClose} 
+                    className="absolute -top-3 -right-3 sm:-top-2 sm:-right-2 bg-white dark:bg-gray-800 rounded-full p-2 sm:p-2.5 shadow-lg active:scale-95 transition-transform touch-manipulation"
+                    aria-label="Cerrar"
+                >
+                    <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" />
                 </button>
             </div>
         </div>
@@ -445,6 +481,22 @@ const App: React.FC = () => {
   const [activeInteraction, setActiveInteraction] = useState<Interaction | null>(null);
   const [viewState, setViewState] = useState<ViewState>('exploring');
   const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Cerrar menú al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isMenuOpen]);
 
   const handleSetupComplete = useCallback((profile: TeacherProfile) => {
     setTeacherProfile(profile);
@@ -476,16 +528,55 @@ const App: React.FC = () => {
     }
   }, [currentScenario]);
 
+  // Función para obtener la clave de almacenamiento de puntajes
+  const getScoreStorageKey = useCallback((topicId: string, teacherName?: string) => {
+    const name = teacherName || teacherProfile?.name || 'default';
+    return `scores_${name}_${topicId}`;
+  }, [teacherProfile?.name]);
+
+  // Función para guardar puntajes en localStorage
+  const saveScores = useCallback((scores: PedagogicalScore, topicId: string) => {
+    if (!topicId) return;
+    try {
+      const storageKey = getScoreStorageKey(topicId);
+      localStorage.setItem(storageKey, JSON.stringify(scores));
+    } catch (error) {
+      console.error('Error al guardar los puntajes:', error);
+    }
+  }, [getScoreStorageKey]);
+
+  // Función para cargar puntajes guardados
+  const loadScores = useCallback((topicId: string): PedagogicalScore | null => {
+    if (!topicId) return null;
+    try {
+      const storageKey = getScoreStorageKey(topicId);
+      const savedScores = localStorage.getItem(storageKey);
+      if (savedScores) {
+        return JSON.parse(savedScores);
+      }
+    } catch (error) {
+      console.error('Error al cargar los puntajes guardados:', error);
+    }
+    return null;
+  }, [getScoreStorageKey]);
+
   const handleSelectOption = useCallback((option: Option) => {
     setSelectedOption(option);
     setViewState('feedback');
-    setScore(prev => ({
-      empathy: prev.empathy + option.score.empathy,
-      assertiveness: prev.assertiveness + option.score.assertiveness,
-      inclusivity: prev.inclusivity + option.score.inclusivity,
-      conflictManagement: prev.conflictManagement + option.score.conflictManagement,
-    }));
-  }, []);
+    setScore(prev => {
+      const newScore = {
+        empathy: prev.empathy + option.score.empathy,
+        assertiveness: prev.assertiveness + option.score.assertiveness,
+        inclusivity: prev.inclusivity + option.score.inclusivity,
+        conflictManagement: prev.conflictManagement + option.score.conflictManagement,
+      };
+      // Guardar los puntajes actualizados
+      if (currentTopicId) {
+        saveScores(newScore, currentTopicId);
+      }
+      return newScore;
+    });
+  }, [currentTopicId, saveScores]);
 
   const handleNext = useCallback(() => {
     setSelectedOption(null);
@@ -498,12 +589,16 @@ const App: React.FC = () => {
     setCurrentTopicName(topicName);
     const newScenario = getScenarioByTopicId(topicId);
     setCurrentScenario(newScenario);
-    setScore(initialScore);
+    
+    // Cargar puntajes guardados o usar puntajes iniciales
+    const savedScores = loadScores(topicId);
+    setScore(savedScores || initialScore);
+    
     setSelectedOption(null);
     setActiveInteraction(null);
     setViewState('exploring');
     setAppState('simulation');
-  }, []);
+  }, [loadScores]);
   
   const handleTriggerInteraction = useCallback(() => {
     if (viewState !== 'exploring') return; // Prevent triggering while another interaction is active
@@ -516,12 +611,23 @@ const App: React.FC = () => {
     }
   }, [currentScenario, viewState]);
 
+  // Guardar puntajes cuando cambien y haya un topicId activo
+  useEffect(() => {
+    if (currentTopicId && appState === 'simulation') {
+      saveScores(score, currentTopicId);
+    }
+  }, [score, currentTopicId, appState, saveScores]);
+
   const handleReturnToWelcome = useCallback(() => {
+    // Guardar puntajes antes de salir
+    if (currentTopicId) {
+      saveScores(score, currentTopicId);
+    }
     setAppState('welcome');
     setCurrentScenario(null);
     setCurrentTopicName('');
     setCurrentTopicId('');
-  }, []);
+  }, [currentTopicId, score, saveScores]);
 
   const handleEditProfile = useCallback(() => {
     setAppState('setup');
@@ -540,60 +646,72 @@ const App: React.FC = () => {
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-900 text-gray-200 font-sans overflow-hidden">
       
-      <header className="bg-gray-800/80 backdrop-blur-md shadow-md z-30 border-b border-white/10 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <h1 className="text-xl sm:text-2xl font-bold text-blue-400">InnovaClass - Simulador 360°</h1>
-              {teacherProfile && (
-                <span className="text-sm text-gray-400 hidden sm:inline">| {teacherProfile.name}</span>
-              )}
+      {/* Controles superiores: Botones */}
+      <div className="fixed top-4 right-4 z-50">
+        {/* Menú hamburguesa - punto de origen */}
+        <div ref={menuRef} className="relative">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="w-12 h-12 sm:w-14 sm:h-14 bg-gray-800/90 dark:bg-gray-900/90 backdrop-blur-md hover:bg-gray-700/90 active:bg-gray-800 text-white rounded-full shadow-xl border-2 border-gray-700/50 dark:border-gray-600/50 flex items-center justify-center transition-all duration-300 touch-manipulation hover:scale-110 active:scale-95"
+            aria-label="Menú"
+          >
+            <Menu className={`w-6 h-6 sm:w-7 sm:h-7 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : ''}`} />
+          </button>
+
+          {/* Puntajes que salen hacia la izquierda */}
+          {isMenuOpen && (
+            <div className="absolute top-0 right-full mr-2 flex items-center gap-2">
+              {Object.entries(score).map(([key, value], index) => {
+                const config = scoreConfig[key as keyof PedagogicalScore];
+                return (
+                  <div 
+                    key={key}
+                    className="flex flex-col items-center animate-slide-in-left"
+                    style={{ animationDelay: `${index * 0.08}s` }}
+                  >
+                    <div 
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${config.bgColor} bg-opacity-95 shadow-lg border-2 border-white/30 flex items-center justify-center transition-all duration-300`}
+                      title={config.label}
+                    >
+                      <span className="text-white font-bold text-xs sm:text-sm">{value}</span>
+                    </div>
+                    <span className="text-[10px] sm:text-xs text-white dark:text-gray-300 mt-1 text-center max-w-[50px] truncate drop-shadow-lg">{config.label}</span>
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
-                 <button 
-                    onClick={() => setIsScoreModalOpen(true)}
-                    className="px-3 py-2 bg-gray-700/50 hover:bg-gray-700/90 text-white font-semibold rounded-lg transition duration-300 flex items-center text-sm sm:text-base shadow-lg hover:shadow-xl"
-                  >
-                     <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 mr-2"/>
-                     Ver Puntaje
-                </button>
-                 <button 
-                    onClick={handleTriggerInteraction}
-                    className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-300 flex items-center text-sm sm:text-base shadow-lg hover:shadow-xl"
-                  >
-                    Iniciar Interacción
-                </button>
-                <button 
-                    onClick={handleReturnToWelcome}
-                    className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition duration-300 flex items-center text-sm sm:text-base shadow-lg hover:shadow-xl"
-                  >
-                    Volver al Menú
-                </button>
-            </div>
+          )}
+
+          {/* Botón Home que sale hacia abajo */}
+          {isMenuOpen && (
+            <button
+              onClick={handleReturnToWelcome}
+              className="absolute top-full left-0 mt-2 w-12 h-12 sm:w-14 sm:h-14 bg-gray-800/90 dark:bg-gray-900/90 backdrop-blur-md hover:bg-gray-700/90 active:bg-gray-800 text-white rounded-full shadow-xl border-2 border-gray-700/50 dark:border-gray-600/50 flex items-center justify-center transition-all duration-300 touch-manipulation hover:scale-110 active:scale-95 animate-slide-in-top"
+              aria-label="Menú Principal"
+              title="Menú Principal"
+            >
+              <Home className="w-6 h-6 sm:w-7 sm:h-7" />
+            </button>
+          )}
         </div>
-      </header>
+      </div>
+
       <main className="relative flex-grow">
         <ScenarioViewer scenario={currentScenario} onHotspotClick={handleHotspotClick} />
 
-        <ScoreModal isOpen={isScoreModalOpen} onClose={() => setIsScoreModalOpen(false)}>
-            {currentTopicConfig.type === 'academic' ? (
-                <AcademicContext topic={currentTopicName} />
-            ) : (
-                <Scoreboard score={score} />
-            )}
-        </ScoreModal>
         
-        {/* Interaction/Feedback Panel: Conditional overlay */}
+        {/* Interaction/Feedback Panel: Conditional overlay - Landscape optimized with safe margins */}
         {viewState !== 'exploring' && (
-            <div className="absolute inset-0 z-20 p-4 sm:p-6 lg:p-8 flex items-end justify-center pointer-events-none">
-                <div className="w-full max-w-7xl flex-grow flex flex-col justify-end pointer-events-auto">
+            <div className="absolute inset-0 z-20 p-4 sm:p-6 lg:p-8 xl:p-10 flex items-center justify-center pointer-events-none overflow-y-auto">
+                <div className="w-full max-w-4xl lg:max-w-5xl xl:max-w-6xl flex-grow flex flex-col justify-center pointer-events-auto pb-safe px-2 sm:px-4">
                     {viewState === 'interaction' && activeInteraction && (
-                        <div className="animate-fade-in-up grid grid-cols-1 xl:grid-cols-2 gap-6 items-end">
+                        <div className="animate-fade-in-up w-full max-w-lg md:max-w-xl lg:max-w-2xl mx-auto space-y-3 sm:space-y-4 landscape:space-y-3 overflow-y-auto max-h-[85vh] px-1">
                             <ScenarioContext interaction={activeInteraction} studentPersona={currentScenario.studentPersona} />
                             <Options options={activeInteraction.options} onSelect={handleSelectOption} disabled={!!selectedOption} />
                         </div>
                     )}
                     {viewState === 'feedback' && selectedOption && (
-                         <div className="max-w-3xl mx-auto w-full animate-fade-in-up">
+                         <div className="max-w-3xl lg:max-w-4xl mx-auto w-full animate-fade-in-up px-2 sm:px-4">
                            <Feedback option={selectedOption} onNext={handleNext} isAcademic={currentTopicConfig.type === 'academic'}/>
                          </div>
                     )}

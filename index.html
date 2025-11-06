@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="screen-orientation" content="landscape" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <title>InnovaClass - Simulador Docente 360°</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
@@ -19,10 +21,22 @@
         animation: pulse 2s infinite;
         cursor: pointer;
         transition: all 0.3s ease;
+        touch-action: manipulation;
       }
       .custom-hotspot:hover {
         transform: scale(1.2);
         box-shadow: 0 6px 20px rgba(59, 130, 246, 0.8), 0 0 0 4px rgba(59, 130, 246, 0.3);
+      }
+      @media (max-width: 640px) {
+        .custom-hotspot {
+          width: 48px;
+          height: 48px;
+          border: 4px solid white;
+        }
+        .custom-hotspot:active {
+          transform: scale(1.15);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.8), 0 0 0 6px rgba(59, 130, 246, 0.3);
+        }
       }
       @keyframes pulse {
         0% { 
@@ -73,6 +87,45 @@
       .animate-fade-in-up {
         animation: fadeInUp 0.5s ease-out forwards;
       }
+      @keyframes slideInFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0) scale(1);
+        }
+      }
+      .animate-slide-in-right {
+        animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      @keyframes slideInFromLeft {
+        from {
+          opacity: 0;
+          transform: translateX(50px) scale(0.7);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0) scale(1);
+        }
+      }
+      .animate-slide-in-left {
+        animation: slideInFromLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      @keyframes slideInFromTop {
+        from {
+          opacity: 0;
+          transform: translateY(50px) scale(0.7);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .animate-slide-in-top {
+        animation: slideInFromTop 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
       .animate-pulse {
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
@@ -84,6 +137,226 @@
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
         background-size: 1000px 100%;
         animation: shimmer 2s infinite;
+      }
+      /* Mobile optimizations for Cardboard */
+      @media (max-width: 640px) {
+        * {
+          -webkit-tap-highlight-color: transparent;
+        }
+        button, a {
+          touch-action: manipulation;
+        }
+        /* Prevent text selection on buttons */
+        button {
+          -webkit-user-select: none;
+          user-select: none;
+        }
+      }
+      /* Landscape optimizations for Google Cardboard */
+      @media (orientation: landscape) {
+        body {
+          overflow: hidden;
+        }
+        /* Ensure content stays within safe margins for Cardboard */
+        * {
+          box-sizing: border-box;
+        }
+        .container {
+          max-width: 100%;
+          padding-left: clamp(0.5rem, 2vw, 1rem);
+          padding-right: clamp(0.5rem, 2vw, 1rem);
+        }
+        /* Prevent horizontal overflow */
+        .overflow-hidden {
+          overflow-x: hidden !important;
+        }
+        /* Ensure text wraps properly */
+        .break-words {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+        }
+        /* Optimize welcome screen for landscape */
+        .landscape\:overflow-hidden {
+          overflow: hidden !important;
+        }
+        /* Larger text for VR viewing */
+        @media (max-height: 600px) {
+          .text-base { font-size: 1.125rem; }
+          .text-lg { font-size: 1.25rem; }
+          .text-xl { font-size: 1.375rem; }
+        }
+        /* Prevent elements from going outside viewport */
+        @media (max-height: 500px) {
+          header {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+          }
+          header h1 {
+            font-size: 0.875rem !important;
+          }
+          header button {
+            padding: 0.375rem 0.5rem !important;
+            font-size: 0.75rem !important;
+          }
+        }
+        /* Force grid layout in landscape even on small screens */
+        @media (orientation: landscape) and (max-width: 768px) {
+          .landscape\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+        /* Tailwind landscape utilities - custom classes */
+        @media (orientation: landscape) {
+          .landscape\:overflow-hidden {
+            overflow: hidden !important;
+          }
+          .landscape\:mb-4 {
+            margin-bottom: 1rem !important;
+          }
+          .landscape\:mb-2 {
+            margin-bottom: 0.5rem !important;
+          }
+          .landscape\:mb-1\.5 {
+            margin-bottom: 0.375rem !important;
+          }
+          .landscape\:mb-1 {
+            margin-bottom: 0.25rem !important;
+          }
+          .landscape\:text-2xl {
+            font-size: 1.5rem !important;
+            line-height: 2rem !important;
+          }
+          .landscape\:text-sm {
+            font-size: 0.875rem !important;
+            line-height: 1.25rem !important;
+          }
+          .landscape\:text-xs {
+            font-size: 0.75rem !important;
+            line-height: 1rem !important;
+          }
+          .landscape\:text-base {
+            font-size: 1rem !important;
+            line-height: 1.5rem !important;
+          }
+          .landscape\:h-10 {
+            height: 2.5rem !important;
+          }
+          .landscape\:w-10 {
+            width: 2.5rem !important;
+          }
+          .landscape\:w-4 {
+            width: 1rem !important;
+          }
+          .landscape\:h-4 {
+            height: 1rem !important;
+          }
+          .landscape\:w-3 {
+            width: 0.75rem !important;
+          }
+          .landscape\:h-3 {
+            height: 0.75rem !important;
+          }
+          .landscape\:mr-2 {
+            margin-right: 0.5rem !important;
+          }
+          .landscape\:mr-1\.5 {
+            margin-right: 0.375rem !important;
+          }
+          .landscape\:gap-4 {
+            gap: 1rem !important;
+          }
+          .landscape\:space-y-2 {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse))) !important;
+            margin-bottom: calc(0.5rem * var(--tw-space-y-reverse)) !important;
+          }
+          .landscape\:space-y-1\.5 > * + * {
+            margin-top: 0.375rem !important;
+          }
+          .landscape\:p-2\.5 {
+            padding: 0.625rem !important;
+          }
+          .landscape\:p-2 {
+            padding: 0.5rem !important;
+          }
+          .landscape\:pb-1\.5 {
+            padding-bottom: 0.375rem !important;
+          }
+          .landscape\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+          .landscape\:space-y-2 > * + * {
+            margin-top: 0.5rem !important;
+          }
+          .landscape\:mt-2 {
+            margin-top: 0.5rem !important;
+          }
+          .landscape\:py-2\.5 {
+            padding-top: 0.625rem !important;
+            padding-bottom: 0.625rem !important;
+          }
+          .landscape\:sm\:py-3 {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+          }
+          .landscape\:sm\:p-3 {
+            padding: 0.75rem !important;
+          }
+          .landscape\:md\:text-base {
+            font-size: 1rem !important;
+            line-height: 1.5rem !important;
+          }
+          .landscape\:md\:text-sm {
+            font-size: 0.875rem !important;
+            line-height: 1.25rem !important;
+          }
+          .landscape\:md\:w-4 {
+            width: 1rem !important;
+          }
+          .landscape\:ml-1\.5 {
+            margin-left: 0.375rem !important;
+          }
+          .landscape\:mb-3 {
+            margin-bottom: 0.75rem !important;
+          }
+          .landscape\:space-y-2\.5 > * + * {
+            margin-top: 0.625rem !important;
+          }
+          .landscape\:mb-1 {
+            margin-bottom: 0.25rem !important;
+          }
+        }
+      }
+      /* Chat message styles */
+      .rounded-tl-sm {
+        border-top-left-radius: 0.125rem !important;
+      }
+      .rounded-tr-sm {
+        border-top-right-radius: 0.125rem !important;
+      }
+      /* Menu dropdown styles */
+      .z-50 {
+        z-index: 50 !important;
+      }
+      /* Score badge colors */
+      .bg-pink-500 {
+        background-color: rgb(236 72 153) !important;
+      }
+      .bg-blue-500 {
+        background-color: rgb(59 130 246) !important;
+      }
+      .bg-purple-500 {
+        background-color: rgb(168 85 247) !important;
+      }
+      .bg-green-500 {
+        background-color: rgb(34 197 94) !important;
+      }
+      /* Safe area for iOS devices */
+      @supports (padding: max(0px)) {
+        .pb-safe {
+          padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
       }
     </style>
   <script type="importmap">
