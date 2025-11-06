@@ -123,10 +123,48 @@ const SetupScreen: React.FC<{ onComplete: (profile: TeacherProfile) => void; ini
   );
 };
 
-const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId: string, topicName: string) => void; onEditProfile: () => void; }> = ({ teacherName, onStartSimulation, onEditProfile }) => {
+// Función para obtener todos los puntajes guardados de un docente
+const getAllSavedScores = (teacherName: string): Record<string, PedagogicalScore> => {
+  const scores: Record<string, PedagogicalScore> = {};
+  try {
+    const prefix = `scores_${teacherName}_`;
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        const topicId = key.replace(prefix, '');
+        const savedScore = localStorage.getItem(key);
+        if (savedScore) {
+          scores[topicId] = JSON.parse(savedScore);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error al obtener puntajes guardados:', error);
+  }
+  return scores;
+};
+
+const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId: string, topicName: string) => void; onEditProfile: () => void; refreshTrigger?: number }> = ({ teacherName, onStartSimulation, onEditProfile, refreshTrigger }) => {
+  const [savedScores, setSavedScores] = useState<Record<string, PedagogicalScore>>({});
+  
+  useEffect(() => {
+    // Cargar puntajes guardados al montar el componente o cuando cambie el trigger
+    const scores = getAllSavedScores(teacherName);
+    setSavedScores(scores);
+  }, [teacherName, refreshTrigger]);
   
   const handleStart = (topicId: string, topicName: string) => {
     onStartSimulation(topicId, topicName);
+  }
+  
+  // Función para obtener el puntaje total de un tema
+  const getTotalScore = (score: PedagogicalScore): number => {
+    return Object.values(score).reduce((sum, val) => sum + val, 0);
+  }
+  
+  // Función para obtener el puntaje guardado de un tema
+  const getTopicScore = (topicId: string): PedagogicalScore | null => {
+    return savedScores[topicId] || null;
   }
 
   return (
@@ -149,6 +187,52 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
           <p className="text-sm sm:text-base lg:text-lg landscape:text-sm text-gray-600 dark:text-gray-400">Elige tu simulación para comenzar a practicar.</p>
         </div>
         
+        {/* Sección de Puntajes Guardados */}
+        {Object.keys(savedScores).length > 0 && (
+          <div className="mb-4 sm:mb-6 lg:mb-8 landscape:mb-4 p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700/50 dark:to-gray-800/50 rounded-lg border border-blue-200 dark:border-blue-800">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center">
+              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-blue-500 flex-shrink-0" />
+              <span>Puntajes Guardados</span>
+            </h3>
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              {Object.entries(savedScores).map(([topicId, score]) => {
+                const topic = allTopics.find(t => t.id === topicId);
+                const totalScore = getTotalScore(score);
+                if (!topic) return null;
+                
+                return (
+                  <div 
+                    key={topicId}
+                    className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm"
+                  >
+                    <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 truncate max-w-[120px] sm:max-w-[150px]">
+                      {topic.name}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      {Object.entries(score).map(([key, value]) => {
+                        const config = scoreConfig[key as keyof PedagogicalScore];
+                        if (value === 0) return null;
+                        return (
+                          <div 
+                            key={key}
+                            className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full ${config.bgColor} flex items-center justify-center shadow-sm`}
+                            title={`${config.label}: ${value}`}
+                          >
+                            <span className="text-white font-bold text-[10px] sm:text-xs">{value}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-400">
+                      {totalScore > 0 ? `+${totalScore}` : totalScore}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        
         {/* Grid adaptativo: vertical en portrait, horizontal en landscape */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 landscape:grid-cols-2 landscape:gap-4">
           {/* Pedagogical Training Column */}
@@ -159,15 +243,25 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
             </h2>
             {pedagogicalTopics.map(topic => {
               const Icon = topic.icon;
+              const topicScore = getTopicScore(topic.id);
+              const totalScore = topicScore ? getTotalScore(topicScore) : null;
+              
               return (
                 <button
                   key={topic.id}
                   onClick={() => handleStart(topic.id, topic.name)}
-                  className="w-full p-2.5 sm:p-3 lg:p-4 landscape:p-2.5 flex items-center bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 active:bg-blue-100 active:border-blue-400 dark:active:bg-blue-900/50 dark:active:border-blue-600 transition-all duration-200 transform active:scale-[0.98] touch-manipulation"
+                  className="w-full p-2.5 sm:p-3 lg:p-4 landscape:p-2.5 flex items-center bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 active:bg-blue-100 active:border-blue-400 dark:active:bg-blue-900/50 dark:active:border-blue-600 transition-all duration-200 transform active:scale-[0.98] touch-manipulation relative"
                 >
                   <Icon className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 landscape:h-5 landscape:w-5 mr-2 sm:mr-3 landscape:mr-2 text-blue-500 flex-shrink-0" />
                   <span className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs text-gray-700 dark:text-gray-200 text-left flex-1 truncate">{topic.name}</span>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 landscape:w-4 landscape:h-4 ml-auto text-gray-400 flex-shrink-0" />
+                  {topicScore && (
+                    <div className="flex items-center gap-1 mr-2">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-500 flex items-center justify-center shadow-sm">
+                        <span className="text-white font-bold text-[10px] sm:text-xs">{totalScore}</span>
+                      </div>
+                    </div>
+                  )}
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 landscape:w-4 landscape:h-4 text-gray-400 flex-shrink-0" />
                 </button>
               )
             })}
@@ -188,15 +282,25 @@ const WelcomeScreen: React.FC<{ teacherName: string; onStartSimulation: (topicId
                  <div className="space-y-1.5 sm:space-y-2 landscape:space-y-1.5">
                     {course.topics.map(topic => {
                       const Icon = topic.icon;
+                      const topicScore = getTopicScore(topic.id);
+                      const totalScore = topicScore ? getTotalScore(topicScore) : null;
+                      
                       return (
                         <button
                           key={topic.id}
                           onClick={() => handleStart(topic.id, `${course.course}: ${topic.name}`)}
-                          className="w-full p-2 sm:p-2.5 lg:p-3 landscape:p-2 flex items-center bg-white dark:bg-gray-700/50 rounded-lg border border-gray-300 dark:border-gray-600 active:bg-green-100 active:border-green-400 dark:active:bg-green-900/50 dark:active:border-green-600 transition-all duration-200 transform active:scale-[0.98] touch-manipulation"
+                          className="w-full p-2 sm:p-2.5 lg:p-3 landscape:p-2 flex items-center bg-white dark:bg-gray-700/50 rounded-lg border border-gray-300 dark:border-gray-600 active:bg-green-100 active:border-green-400 dark:active:bg-green-900/50 dark:active:border-green-600 transition-all duration-200 transform active:scale-[0.98] touch-manipulation relative"
                         >
                           <Icon className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 landscape:h-4 landscape:w-4 mr-2 text-green-500 flex-shrink-0" />
                           <span className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg landscape:text-xs text-gray-700 dark:text-gray-200 text-left flex-1 truncate">{topic.name}</span>
-                          <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 landscape:w-3 landscape:h-3 ml-auto text-gray-400 flex-shrink-0" />
+                          {topicScore && (
+                            <div className="flex items-center gap-1 mr-2">
+                              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">
+                                <span className="text-white font-bold text-[10px] sm:text-xs">{totalScore}</span>
+                              </div>
+                            </div>
+                          )}
+                          <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 landscape:w-3 landscape:h-3 text-gray-400 flex-shrink-0" />
                         </button>
                       )
                     })}
@@ -482,6 +586,7 @@ const App: React.FC = () => {
   const [viewState, setViewState] = useState<ViewState>('exploring');
   const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Cerrar menú al hacer click fuera
@@ -627,6 +732,8 @@ const App: React.FC = () => {
     setCurrentScenario(null);
     setCurrentTopicName('');
     setCurrentTopicId('');
+    // Incrementar trigger para refrescar los puntajes guardados
+    setRefreshTrigger(prev => prev + 1);
   }, [currentTopicId, score, saveScores]);
 
   const handleEditProfile = useCallback(() => {
@@ -638,7 +745,7 @@ const App: React.FC = () => {
   }
 
   if (appState === 'welcome' || !currentScenario) {
-    return <WelcomeScreen teacherName={teacherProfile?.name || 'Docente'} onStartSimulation={handleStartSimulation} onEditProfile={handleEditProfile} />;
+    return <WelcomeScreen teacherName={teacherProfile?.name || 'Docente'} onStartSimulation={handleStartSimulation} onEditProfile={handleEditProfile} refreshTrigger={refreshTrigger} />;
   }
   
   const currentTopicConfig = allTopics.find(t => t.id === currentTopicId) || { type: 'pedagogical' };
