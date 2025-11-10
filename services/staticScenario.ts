@@ -19,8 +19,8 @@ const scenarioTopicMap: Record<string, { title: string, studentPersona: string, 
     'inclusion-diversity': {
         title: "Inclusión y Diversidad",
         studentPersona: "Wayra, un estudiante de 10 años de una comunidad asháninka, se ha trasladado recientemente a esta escuela rural andina. Habla asháninka como lengua materna y está aprendiendo castellano. Sus nuevos compañeros, principalmente quechuahablantes, mantienen distancia y no lo integran en sus juegos ni trabajos grupales.",
-        interactionTitle: "Integración intercultural",
-        context: "Wayra está solo en su escritorio. Los demás estudiantes forman grupos sin incluirlo. Wayra te mira esperando algo."
+        interactionTitle: "Situación de exclusión cultural",
+        context: "Durante una actividad sobre plantas medicinales, Ana menciona: 'Profe, mi abuela usa hierbas quechuas para curar.' Wayra levanta tímidamente la mano y dice: 'En mi comunidad también usamos plantas, pero con nombres diferentes en asháninka.' Algunos estudiantes se ríen y Ana dice: 'Eso no es importante, solo lo que está en el libro cuenta.'"
     },
     // update: Transformado a formato alumno-docente con preguntas específicas de estudiantes virtuales
     'photosynthesis': {
@@ -182,24 +182,24 @@ export const getScenarioByTopicId = (topicId: string): Scenario => {
   if (topicId === 'inclusion-diversity') {
       scenario.interactions[0].options[0] = {
           id: 1,
-          text: "Asignar obligatoriamente a Wayra en un grupo, indicando a los estudiantes que deben incluirlo sin mayor explicación.",
-          score: { empathy: 0, assertiveness: 1, inclusivity: 0, conflictManagement: 0 },
-          ramification: "Los estudiantes incluyen físicamente a Wayra pero no lo integran realmente. Trabajan alrededor de él sin involucrarle. Wayra se siente más aislado aún, estando presente pero invisible. La inclusión superficial no genera pertenencia.",
-          feedback: "La inclusión forzada sin trabajo previo de sensibilización raramente funciona. Es fundamental preparar al grupo para valorar la diversidad y entender la riqueza del intercambio cultural antes de formar equipos."
+          text: "Responder: 'Ana tiene razón, sigamos con el libro. Wayra, puedes aprender los nombres quechuas también.'",
+          score: { empathy: -1, assertiveness: 1, inclusivity: -2, conflictManagement: 0 },
+          ramification: "Wayra se calla y baja la mirada. Los estudiantes quechuahablantes refuerzan la idea de que su conocimiento es superior. Wayra deja de participar y evita compartir su cultura. Se refuerza la jerarquía cultural donde el conocimiento asháninka es visto como menos válido.",
+          feedback: "❌ Respuesta que refuerza la exclusión cultural. Al validar el comentario de Ana, desvalorizas el conocimiento de Wayra y refuerzas una jerarquía cultural perjudicial. En contextos multiculturales, es crucial valorar equitativamente todos los saberes."
       };
       scenario.interactions[0].options[1] = {
           id: 2,
-          text: "Realizar una actividad de valoración de la diversidad cultural donde cada estudiante comparta algo único de su comunidad, comenzando tú con un ejemplo de otra cultura.",
-          score: { empathy: 2, assertiveness: 1, inclusivity: 2, conflictManagement: 1 },
-          ramification: "Los estudiantes descubren similitudes y diferencias entre culturas. Wayra comparte sobre la cosmovisión asháninka y su relación con la naturaleza. Los demás muestran curiosidad genuina. Se generan preguntas respetuosas. Un compañero nota que ambos respetan la Pachamama/naturaleza, creando un punto de conexión.",
-          feedback: "¡Extraordinario enfoque intercultural! Al crear un espacio donde todas las culturas son valoradas equitativamente, transformas la diferencia de barrera a puente. Promover el conocimiento mutuo es la base de la inclusión genuina en contextos multiculturales."
+          text: "Responder: '¡Excelente, Wayra! Todos los conocimientos son valiosos. Ana, ¿podrías compartir los nombres quechuas? Y Wayra, ¿podrías enseñarnos los nombres en asháninka? Así aprendemos de ambas culturas.'",
+          score: { empathy: 2, assertiveness: 2, inclusivity: 2, conflictManagement: 1 },
+          ramification: "Wayra sonríe y comparte con entusiasmo. Ana se disculpa y también comparte. Los estudiantes crean un 'diccionario' bilingüe de plantas medicinales. Wayra gana confianza y se siente valorado. Los demás estudiantes muestran interés genuino por aprender palabras en asháninka. Se construye un ambiente de respeto mutuo.",
+          feedback: "✅ ¡Respuesta excepcional de inclusión intercultural! Has transformado un momento de exclusión en oportunidad de aprendizaje mutuo. Al valorar equitativamente ambos conocimientos y crear un espacio de intercambio, construyes inclusión genuina y fortaleces la identidad cultural de Wayra."
       };
       scenario.interactions[0].options[2] = {
           id: 3,
-          text: "Implementar un sistema de 'embajadores culturales' donde estudiantes enseñan palabras o conceptos de su lengua originaria a compañeros, posicionando a Wayra como experto en asháninka.",
-          score: { empathy: 2, assertiveness: 2, inclusivity: 2, conflictManagement: 1 },
-          ramification: "Wayra enseña palabras en asháninka y se convierte en 'profesor' respetado. Los estudiantes quechuahablantes también enseñan su lengua. Se genera intercambio cultural recíproco. Wayra gana estatus y confianza. Sus compañeros ven su lengua como valiosa, no como barrera.",
-          feedback: "¡Pedagogía transformadora! Has convertido lo que era visto como 'déficit' en 'fortaleza'. Al posicionar las lenguas originarias como conocimiento valioso y a los hablantes como expertos, inviertes las dinámicas de poder y construyes inclusión desde el respeto y la valoración mutua."
+          text: "Responder: 'Wayra, gracias por compartir. Pero ahora debemos seguir con el contenido del libro. Puedes hablar de eso después si quieres.'",
+          score: { empathy: 1, assertiveness: 1, inclusivity: 0, conflictManagement: 0 },
+          ramification: "Wayra guarda silencio pero se siente parcialmente reconocido. Sin embargo, el mensaje implícito es que su conocimiento es secundario al contenido oficial. Los estudiantes no aprenden sobre la diversidad de saberes. La oportunidad de inclusión se pierde.",
+          feedback: "⚠️ Respuesta parcialmente inclusiva pero con limitaciones. Aunque reconoces a Wayra, al posponer su conocimiento lo posicionas como menos importante. Mejora: integrar ambos conocimientos en el momento, mostrando que el saber local complementa y enriquece el conocimiento académico."
       };
   }
   
