@@ -765,7 +765,11 @@ const Options: React.FC<{ options: Option[], onSelect: (option: Option) => void,
 
 const Feedback: React.FC<{ option: Option, onNext: () => void, isAcademic: boolean }> = ({ option, onNext, isAcademic }) => {
   const scoreTotal = Object.values(option.score).reduce((sum, val) => sum + val, 0);
-  const isPositive = scoreTotal > 0;
+  // Para temas académicos, determinar si es positivo basándose en el feedback (si contiene ✅ o "Excelente")
+  // Para temas pedagógicos, usar el scoreTotal
+  const isPositive = isAcademic 
+    ? option.feedback.includes('✅') || option.feedback.includes('Excelente') || option.feedback.includes('¡Excelente')
+    : scoreTotal > 0;
   
   return (
     <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md p-2.5 sm:p-3 md:p-4 lg:p-5 landscape:p-2.5 landscape:sm:p-3 rounded-xl shadow-2xl flex flex-col border-2 border-white/30 dark:border-gray-700/50 max-w-full">

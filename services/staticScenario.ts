@@ -8,19 +8,19 @@ const scenarioTopicMap: Record<string, { title: string, studentPersona: string, 
         title: "Manejo de Conflictos",
         studentPersona: "En el aula multigrado, dos estudiantes de quinto grado, Ana y Luis, disputan por el único libro de Ciencias Naturales disponible. Ana llegó primero pero Luis argumenta que lo necesita para completar su tarea. Ambos elevan la voz y otros estudiantes observan la situación, interrumpiendo sus actividades.",
         interactionTitle: "Disputa por recursos limitados",
-        context: "Ana y Luis discuten por el libro de Ciencias. Ambos lo necesitan para sus tareas, pero solo hay un ejemplar. La tensión aumenta y otros estudiantes dejan de trabajar para observar el conflicto."
+        context: "Ana levanta la mano y dice: 'Profe, yo llegué primero pero Luis dice que necesita el libro ahora. ¿Quién lo usa?'"
     },
     'fostering-participation': {
         title: "Fomentando la Participación",
         studentPersona: "En un aula multigrado de zona rural, María (12 años) es una estudiante quechuahablante que rara vez participa en clase. Aunque domina el castellano, muestra inseguridad al expresarse frente a sus compañeros. Durante las actividades grupales, tiende a mantenerse en silencio mientras otros estudiantes dominan la conversación.",
         interactionTitle: "Promoviendo voces diversas",
-        context: "Durante una actividad de grupo sobre cultivos locales, notas que María, quien posee conocimiento valioso sobre agricultura tradicional por su familia, permanece callada mientras otros estudiantes menos informados dominan la discusión."
+        context: "María mira hacia abajo mientras otros estudiantes hablan sobre cultivos. Observas que tiene mucho conocimiento pero no participa."
     },
     'inclusion-diversity': {
         title: "Inclusión y Diversidad",
         studentPersona: "Wayra, un estudiante de 10 años de una comunidad asháninka, se ha trasladado recientemente a esta escuela rural andina. Habla asháninka como lengua materna y está aprendiendo castellano. Sus nuevos compañeros, principalmente quechuahablantes, mantienen distancia y no lo integran en sus juegos ni trabajos grupales.",
         interactionTitle: "Integración intercultural",
-        context: "Durante el recreo, observas que Wayra está solo mientras sus compañeros juegan en grupos. En clase, cuando propones un trabajo grupal, los estudiantes forman equipos evitando incluirlo. Es momento de abordar esta situación para construir un ambiente verdaderamente inclusivo."
+        context: "Wayra está solo en su escritorio. Los demás estudiantes forman grupos sin incluirlo. Wayra te mira esperando algo."
     },
     // update: Transformado a formato alumno-docente con preguntas específicas de estudiantes virtuales
     'photosynthesis': {
@@ -205,6 +205,10 @@ export const getScenarioByTopicId = (topicId: string): Scenario => {
   
   // update: Transformado a formato alumno-docente - pregunta incorrecta de estudiante sobre fotosíntesis
   if (topicId === 'photosynthesis') {
+      // Eliminar interacciones de pizarra y ventana para temas académicos (solo mantener la interacción principal)
+      scenario.interactions = scenario.interactions.filter((interaction: any) => interaction.id === 'students-desk');
+      scenario.hotspots = scenario.hotspots.filter((hotspot: any) => hotspot.id === 'students-desk');
+      
       // update: Agregar hotspot adicional solo para fotosíntesis con pregunta incorrecta de estudiante
       scenario.hotspots.push({ id: 'student-question', pitch: -10, yaw: 30, text: 'Pregunta de Luis' });
       
